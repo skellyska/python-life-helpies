@@ -1,0 +1,35 @@
+import requests
+import os
+import re
+from bs4 import BeautifulSoup
+
+# Set the directory where you want to save the videos
+dst_dir = '/Users/Desktop/Videos'
+
+# Set the URL of the website that you want to scrape
+url = 'https://www.example.com/free-videos'
+
+# Send a request to the website
+response = requests.get(url)
+
+# Parse the HTML content of the page
+soup = BeautifulSoup(response.content, 'html.parser')
+
+# Find all the links to YouTube videos on the page
+links = soup.find_all('a', href=re.compile('https://www.youtube.com/watch'))
+
+# Loop through the links
+for link in links:
+  # Get the video URL
+  video_url = link['href']
+  
+  # Use YouTube's API to get the video title
+  video_response = requests.get(f'https://www.youtube.com/oembed?url={video_url}')
+  video_data = video_response.json()
+  video_title = video_data['title']
+  
+  # Download the video using YouTube-DL
+  os.system(f'youtube-dl {video_url} -o "{dst_dir}/%(title)s.%(ext)s"')
+  
+  # Print a message
+  print(f'Downloaded "{video_title}" to {dst_dir}')
