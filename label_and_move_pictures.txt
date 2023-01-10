@@ -1,23 +1,19 @@
 import os
-import shutil
 
-# Set the directory where your pictures are located
-src_dir = '/Users/Desktop/Pictures'
+# Set the directory where the pictures are located (in this case, the desktop)
+directory = '/Users/ericskelly/Desktop/Pictures/'
 
-# Set the directory where you want to move the labeled pictures
-dst_dir = '/Users/Desktop/LabeledPictures'
+# Set the starting number for the new filenames
+num = 1
 
-# Loop through all files in the source directory
-for file_name in os.listdir(src_dir):
-  # Check if the file is a picture (assumes all picture files end with '.jpg')
-  if file_name.endswith('.jpg'):
-    # Label the picture with the file name (without the '.jpg' extension)
-    label = file_name[:-4]
-    print(f'Labeling picture "{file_name}" with "{label}"')
-    
-    # Construct the full file paths
-    src_path = os.path.join(src_dir, file_name)
-    dst_path = os.path.join(dst_dir, file_name)
-    
-    # Move the picture to the labeled pictures directory
-    shutil.move(src_path, dst_path)
+# Iterate through the pictures in the directory
+for filename in os.listdir(directory):
+  if filename.endswith('.jpg') or filename.endswith('.png') or filename.endswith('.heic'):
+    # Set the new filename
+    new_filename = 'picture-' + str(num) + '.jpg'
+
+    # Rename the file
+    os.rename(directory + filename, directory + new_filename)
+    num += 1
+
+print("Done!")
